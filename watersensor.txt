@@ -1,0 +1,31 @@
+//Haal de liquidcrystal library erbij
+#include <LiquidCrystal.h>
+//definieer welke pins zijn gebruikt voor de LCD
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+const int speaker = 8;
+int resval = 0;  // reserve voor de waarde
+int respin = A5; // de analoge pin waar de meter op is aangesloten
+void setup() {
+  pinMode(speaker, OUTPUT);
+  lcd.begin(16,2);
+  lcd.print("WATER LEVEL: ");
+}
+void loop() {
+  lcd.setCursor(0, 1);
+  resval = analogRead(respin); //leest de data van de analogepin af en schrijft dit later naar de resval
+  if (resval <= 400) {
+    lcd.println("Empty................");
+  }
+  else if (resval > 401 && resval <= 600) {
+    lcd.println("Low.................");
+  }
+  else if (resval > 601 && resval <= 649) {
+    lcd.println("Medium!...............");
+    tone(speaker, 400, 400);
+  }
+  else if (resval > 650) {
+    lcd.println("High!!...............");
+    tone(speaker, 800, 400);
+  }
+  delay(1000);
+}
